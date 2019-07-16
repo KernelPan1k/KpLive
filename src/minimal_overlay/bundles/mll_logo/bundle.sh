@@ -20,32 +20,24 @@ set -e
 #ppmquant 224 $WORK_DIR/logo/mll_logo.ppm > $WORK_DIR/logo/mll_logo_224.ppm
 #pnmnoraw $WORK_DIR/logo/mll_logo_224.ppm > $SRC_DIR/mll_logo_ascii_224.ppm
 
-# Read the 'USE_BOOT_LOGO' property from '.config'
-USE_BOOT_LOGO=`read_property USE_BOOT_LOGO`
-
-if [ ! "$USE_BOOT_LOGO" = "true" ] ; then
-  echo "Boot logo has been disabled. No need to generate MLL boot logo."
-  exit 0
-fi
-
-if [ ! -f $WORK_DIR/kernel/linux-*/.config ] ; then
+if [[ ! -f ${WORK_DIR}/kernel/linux-*/.config ]] ; then
   echo "Kernel configuration does not exist. Cannot continue."
   exit 1
 fi
 
-if [ ! -f $WORK_DIR/kernel/kernel_installed/kernel ] ; then
+if [[ ! -f ${WORK_DIR}/kernel/kernel_installed/kernel ]] ; then
   echo "Kernel image does not exist. Cannot continue."
   exit 1
 fi
 
-rm -f `ls -d $WORK_DIR/kernel/linux-*`/drivers/video/logo/logo_linux_clut224.ppm
-cp $SRC_DIR/mll_logo_ascii_224.ppm `ls -d $WORK_DIR/kernel/linux-*`/drivers/video/logo/logo_linux_clut224.ppm
-touch `ls -d $WORK_DIR/kernel/linux-*`/drivers/video/logo/logo_linux_clut224.ppm
+rm -f `ls -d ${WORK_DIR}/kernel/linux-*`/drivers/video/logo/logo_linux_clut224.ppm
+cp ${SRC_DIR}/mll_logo_ascii_224.ppm `ls -d ${WORK_DIR}/kernel/linux-*`/drivers/video/logo/logo_linux_clut224.ppm
+touch `ls -d ${WORK_DIR}/kernel/linux-*`/drivers/video/logo/logo_linux_clut224.ppm
 
-cd `ls -d $WORK_DIR/kernel/linux-*`
+cd `ls -d ${WORK_DIR}/kernel/linux-*`
 
 make bzImage -j 4
 
-cp arch/x86/boot/bzImage $WORK_DIR/kernel/kernel_installed/kernel
+cp arch/x86/boot/bzImage ${WORK_DIR}/kernel/kernel_installed/kernel
 
-cd $SRC_DIR
+cd ${SRC_DIR}
