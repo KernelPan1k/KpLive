@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -8,8 +8,8 @@ set -e
 echo "*** CLEAN BEGIN ***"
 
 echo "Cleaning up the main work area. This may take a while."
-rm -rf $WORK_DIR
-mkdir $WORK_DIR
-mkdir -p $SOURCE_DIR
+rm -rf ${WORK_DIR}
+mkdir ${WORK_DIR}
+mkdir -p ${SOURCE_DIR}
 
 echo "*** CLEAN END ***"

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -13,10 +13,10 @@ download() {
   ARCHIVE_FILE=${DOWNLOAD_URL##*/}
 
   # Download systemd-boot source archive in the 'source' directory.
-  download_source $DOWNLOAD_URL $SOURCE_DIR/$ARCHIVE_FILE
+  download_source ${DOWNLOAD_URL} ${SOURCE_DIR}/${ARCHIVE_FILE}
 
   # Extract the 'systemd-boot' sources in the 'work/systemd-boot' directory.
-  extract_source $SOURCE_DIR/$ARCHIVE_FILE systemd-boot  
+  extract_source ${SOURCE_DIR}/${ARCHIVE_FILE} systemd-boot
 }
 
 echo "*** GET SYSTEMD-BOOT BEGIN ***"
@@ -25,7 +25,7 @@ echo "*** GET SYSTEMD-BOOT BEGIN ***"
 FIRMWARE_TYPE=`read_property FIRMWARE_TYPE`
 echo "Firmware type is '$FIRMWARE_TYPE'."
 
-case $FIRMWARE_TYPE in
+case ${FIRMWARE_TYPE} in
   uefi)
     download
     ;;
@@ -45,6 +45,6 @@ case $FIRMWARE_TYPE in
 esac
 
 # We go back to the main MLL source folder.
-cd $SRC_DIR
+cd ${SRC_DIR}
 
 echo "*** GET SYSTEMD-BOOT END ***"

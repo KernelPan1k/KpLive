@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -20,7 +20,7 @@ set -e
 #ppmquant 224 $WORK_DIR/logo/mll_logo.ppm > $WORK_DIR/logo/mll_logo_224.ppm
 #pnmnoraw $WORK_DIR/logo/mll_logo_224.ppm > $SRC_DIR/mll_logo_ascii_224.ppm
 
-if [[ ! -f ${WORK_DIR}/kernel/linux-*/.config ]] ; then
+if [ ! -f ${WORK_DIR}/kernel/linux-*/.config ] ; then
   echo "Kernel configuration does not exist. Cannot continue."
   exit 1
 fi

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -8,36 +8,36 @@ set -e
 echo "*** GENERATE IMAGE BEGIN ***"
 
 # Prepare the work area.
-rm -f $SRC_DIR/mll_image.tgz
-rm -rf $WORK_DIR/mll_image
-mkdir -p $WORK_DIR/mll_image
+rm -f ${SRC_DIR}/mll_image.tgz
+rm -rf ${WORK_DIR}/mll_image
+mkdir -p ${WORK_DIR}/mll_image
 
-if [ -d $ROOTFS ] ; then
+if [[ -d ${ROOTFS} ]] ; then
   # Copy the rootfs.
-  cp -r $ROOTFS/* \
-    $WORK_DIR/mll_image
+  cp -r ${ROOTFS}/* \
+    ${WORK_DIR}/mll_image
 else
   echo "Cannot continue - rootfs is missing."
   exit 1
 fi
 
-if [ -d $OVERLAY_ROOTFS ] && \
-   [ ! "`ls -A $OVERLAY_ROOTFS`" = "" ] ; then
+if [[ -d ${OVERLAY_ROOTFS} ]] && \
+   [[ ! "`ls -A $OVERLAY_ROOTFS`" = "" ]] ; then
 
   echo "Merging overlay software in image."
 
   # Copy the overlay content.
   # With '--remove-destination' all possibly existing soft links in
   # $WORK_DIR/mll_image will be overwritten correctly.
-  cp -r --remove-destination $OVERLAY_ROOTFS/* \
-    $WORK_DIR/mll_image
-  cp -r --remove-destination $SRC_DIR/minimal_overlay/rootfs/* \
-    $WORK_DIR/mll_image
+  cp -r --remove-destination ${OVERLAY_ROOTFS}/* \
+    ${WORK_DIR}/mll_image
+  cp -r --remove-destination ${SRC_DIR}/minimal_overlay/rootfs/* \
+    ${WORK_DIR}/mll_image
 else
   echo "MLL image will have no overlay software."
 fi
 
-cd $WORK_DIR/mll_image
+cd ${WORK_DIR}/mll_image
 
 # Generate the image file (ordinary 'tgz').
 tar -zcf $SRC_DIR/mll_image.tgz *

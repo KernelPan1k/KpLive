@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -8,7 +8,7 @@ set -e
 DOWNLOAD_URL=`read_property STATIC_GET_URL`
 USE_LOCAL_SOURCE=`read_property USE_LOCAL_SOURCE`
 
-if [ "$USE_LOCAL_SOURCE" = "true" -a ! -f ${MAIN_SRC_DIR}/source/overlay/static-get.sh  ] ; then
+if [[ "$USE_LOCAL_SOURCE" = "true" && ! -f ${MAIN_SRC_DIR}/source/overlay/static-get.sh  ]] ; then
   echo "Shell script $MAIN_SRC_DIR/source/overlay/static-get.sh is missing and will be downloaded."
   USE_LOCAL_SOURCE="false"
 fi

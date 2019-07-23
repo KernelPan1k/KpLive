@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -14,12 +14,12 @@ DOWNLOAD_URL=`read_property GLIBC_SOURCE_URL`
 ARCHIVE_FILE=${DOWNLOAD_URL##*/}
 
 # Download glibc source archive in the 'source' directory.
-download_source $DOWNLOAD_URL $SOURCE_DIR/$ARCHIVE_FILE
+download_source ${DOWNLOAD_URL} ${SOURCE_DIR}/${ARCHIVE_FILE}
 
 # Extract the glibc sources in the 'work/glibc' directory.
-extract_source $SOURCE_DIR/$ARCHIVE_FILE glibc
+extract_source ${SOURCE_DIR}/${ARCHIVE_FILE} glibc
 
 # We go back to the main MLL source folder.
-cd $SRC_DIR
+cd ${SRC_DIR}
 
 echo "*** GET GLIBC END ***"

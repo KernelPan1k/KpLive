@@ -27,7 +27,7 @@
 echo -e "Welcome to \\e[1mMinimal \\e[32mLinux \\e[31mLive\\e[0m (/sbin/init)"
 
 # Autorun functionality
-if [[ -d /etc/autorun ]] ; then
+if [ -d /etc/autorun ]; then
 for AUTOSCRIPT in /etc/autorun/*
   do
     if [[ -f "$AUTOSCRIPT" ]] && [[ -x "$AUTOSCRIPT" ]]; then
