@@ -68,7 +68,7 @@ for DEVICE in /dev/* ; do
   DEV=$(echo "${DEVICE##*/}")
   SYSDEV=$(echo "/sys/class/block/$DEV")
 
-  case $DEV in
+  case ${DEV} in
     *loop*) continue ;;
   esac
 

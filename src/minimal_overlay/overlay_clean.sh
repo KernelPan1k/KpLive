@@ -15,4 +15,4 @@ mkdir -p ../source/overlay
 
 echo "Ready to continue with the overlay software."
 
-cd $SRC_DIR
+cd ${SRC_DIR}
