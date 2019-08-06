@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Use this script without arguments to run the generated ISO image with QEMU.
 # If you pass '-hdd' or '-h' the virtual hard disk 'hdd.img' will be attached.
@@ -27,7 +27,7 @@ cat << CEOF
 
 CEOF
 
-if [[ "`uname -m`" = "x86_64" ]] ; then
+if [ "`uname -m`" = "x86_64" ] ; then
   ARCH="x86_64"
 else
   ARCH="i386"
@@ -35,10 +35,10 @@ fi
 
 cmd="qemu-system-$ARCH -m 128M -cdrom minimal_linux_live.iso -boot d -nographic"
 
-if [[ "$1" = "-hdd" || "$1" = "-h" ]] ; then
+if [ "$1" = "-hdd" -o "$1" = "-h" ] ; then
   echo "Starting QEMU with attached ISO image and hard disk."
-  echo 'console' | ${cmd} -hda hdd.img
+  echo 'console' | $cmd -hda hdd.img
 else
   echo "Starting QEMU with attached ISO image."
-  echo 'console' | ${cmd}
+  echo 'console' | $cmd
 fi

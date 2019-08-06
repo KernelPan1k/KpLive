@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
@@ -13,10 +13,10 @@ download() {
   ARCHIVE_FILE=${DOWNLOAD_URL##*/}
 
   # Download Syslinux source archive in the 'source' directory.
-  download_source ${DOWNLOAD_URL} ${SOURCE_DIR}/${ARCHIVE_FILE}
+  download_source $DOWNLOAD_URL $SOURCE_DIR/$ARCHIVE_FILE
 
   # Extract the Syslinux sources in the 'work/syslinux' directory.
-  extract_source ${SOURCE_DIR}/${ARCHIVE_FILE} syslinux
+  extract_source $SOURCE_DIR/$ARCHIVE_FILE syslinux
 }
 
 echo "*** GET SYSLINUX BEGIN ***"
@@ -25,7 +25,7 @@ echo "*** GET SYSLINUX BEGIN ***"
 FIRMWARE_TYPE=`read_property FIRMWARE_TYPE`
 echo "Firmware type is '$FIRMWARE_TYPE'."
 
-case ${FIRMWARE_TYPE} in
+case $FIRMWARE_TYPE in
   bios)
     download
     ;;
@@ -45,6 +45,6 @@ case ${FIRMWARE_TYPE} in
 esac
 
 # We go back to the main MLL source folder.
-cd ${SRC_DIR}
+cd $SRC_DIR
 
 echo "*** GET SYSLINUX END ***"

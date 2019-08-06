@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
@@ -8,27 +8,27 @@ set -e
 echo "*** BUILD KERNEL BEGIN ***"
 
 # Change to the kernel source directory which ls finds, e.g. 'linux-4.4.6'.
-cd `ls -d ${WORK_DIR}/kernel/linux-*`
+cd `ls -d $WORK_DIR/kernel/linux-*`
 
 # Cleans up the kernel sources, including configuration files.
 echo "Preparing kernel work area."
-make mrproper -j ${NUM_JOBS}
+make mrproper -j $NUM_JOBS
 
 # Read the 'USE_PREDEFINED_KERNEL_CONFIG' property from '.config'
 USE_PREDEFINED_KERNEL_CONFIG=`read_property USE_PREDEFINED_KERNEL_CONFIG`
 
-if [[ "$USE_PREDEFINED_KERNEL_CONFIG" = "true" && ! -f ${SRC_DIR}/minimal_config/kernel.config ]] ; then
+if [ "$USE_PREDEFINED_KERNEL_CONFIG" = "true" -a ! -f $SRC_DIR/minimal_config/kernel.config ] ; then
   echo "Config file '$SRC_DIR/minimal_config/kernel.config' does not exist."
   USE_PREDEFINED_KERNEL_CONFIG=false
 fi
 
-if [[ "$USE_PREDEFINED_KERNEL_CONFIG" = "true" ]] ; then
+if [ "$USE_PREDEFINED_KERNEL_CONFIG" = "true" ] ; then
   # Use predefined configuration file for the kernel.
   echo "Using config file '$SRC_DIR/minimal_config/kernel.config'."
-  cp -f ${SRC_DIR}/minimal_config/kernel.config .config
+  cp -f $SRC_DIR/minimal_config/kernel.config .config
 else
   # Create default configuration file for the kernel.
-  make defconfig -j ${NUM_JOBS}
+  make defconfig -j $NUM_JOBS
   echo "Generated default kernel configuration."
 
   # Changes the name of the system to 'minimal'.
@@ -64,7 +64,16 @@ else
   # Enable the VESA framebuffer for graphics support.
   sed -i "s/.*CONFIG_FB_VESA.*/CONFIG_FB_VESA=y/" .config
 
-  sed -i "s/.*CONFIG_LOGO_LINUX_CLUT224.*/CONFIG_LOGO_LINUX_CLUT224=y/" .config
+  # Read the 'USE_BOOT_LOGO' property from '.config'
+  USE_BOOT_LOGO=`read_property USE_BOOT_LOGO`
+
+  if [ "$USE_BOOT_LOGO" = "true" ] ; then
+    sed -i "s/.*CONFIG_LOGO_LINUX_CLUT224.*/CONFIG_LOGO_LINUX_CLUT224=y/" .config
+    echo "Boot logo is enabled."
+  else
+    sed -i "s/.*CONFIG_LOGO_LINUX_CLUT224.*/\\# CONFIG_LOGO_LINUX_CLUT224 is not set/" .config
+    echo "Boot logo is disabled."
+  fi
 
   # Disable debug symbols in kernel => smaller kernel binary.
   sed -i "s/^CONFIG_DEBUG_KERNEL.*/\\# CONFIG_DEBUG_KERNEL is not set/" .config
@@ -79,14 +88,14 @@ else
   echo "CONFIG_APPLE_PROPERTIES=n" >> .config
 
   # Check if we are building 64-bit kernel.
-  if [[ "`grep "CONFIG_X86_64=y" .config`" = "CONFIG_X86_64=y" ]] ; then
+  if [ "`grep "CONFIG_X86_64=y" .config`" = "CONFIG_X86_64=y" ] ; then
     # Enable the mixed EFI mode when building 64-bit kernel.
     echo "CONFIG_EFI_MIXED=y" >> .config
   fi
 
-  echo "CONFIG_NTFS_FS=y" >> .config
-  echo "# CONFIG_NTFS_DEBUG is not set" >> .config
-  echo "CONFIG_NTFS_RW=y" >> .config
+#  echo "CONFIG_NTFS_FS=y" >> .config
+#  echo "# CONFIG_NTFS_DEBUG is not set" >> .config
+  echo "CONFIG_FUSE_FS=y" >> .config
 fi
 
 # Compile the kernel with optimization for 'parallel jobs' = 'number of processors'.
@@ -99,20 +108,20 @@ make \
 
 # Prepare the kernel install area.
 echo "Removing old kernel artifacts. This may take a while."
-rm -rf ${KERNEL_INSTALLED}
-mkdir ${KERNEL_INSTALLED}
+rm -rf $KERNEL_INSTALLED
+mkdir $KERNEL_INSTALLED
 
 # Install the kernel file.
 cp arch/x86/boot/bzImage \
-  ${KERNEL_INSTALLED}/kernel
+  $KERNEL_INSTALLED/kernel
 
 # Install kernel headers which are used later when we build and configure the
 # GNU C library (glibc).
 echo "Generating kernel headers."
 make \
-  INSTALL_HDR_PATH=${KERNEL_INSTALLED} \
-  headers_install -j ${NUM_JOBS}
+  INSTALL_HDR_PATH=$KERNEL_INSTALLED \
+  headers_install -j $NUM_JOBS
 
-cd ${SRC_DIR}
+cd $SRC_DIR
 
 echo "*** BUILD KERNEL END ***"

@@ -49,7 +49,7 @@ else
   # Print second message on screen.
   cat /etc/msg/03_init_02.txt
 
-  if [[ "$PID1_SHELL" = "true" ]] ; then
+  if [ "$PID1_SHELL" = "true" ] ; then
     # PID1_SHELL flag is set which means we have controlling terminal.
     unset PID1_SHELL
     exec sh

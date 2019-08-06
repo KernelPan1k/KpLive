@@ -37,7 +37,7 @@ echo "Created folders for all critical file systems."
 # Copy root folders in the new mountpoint.
 echo -e "Copying the root file system to \\e[94m/mnt\\e[0m."
 for dir in */ ; do
-  case ${dir} in
+  case $dir in
     dev/)
       # skip
       ;;
@@ -84,31 +84,31 @@ for DEVICE in /dev/* ; do
   UPPER_DIR=""
   WORK_DIR=""
 
-  mount $DEVICE ${DEVICE_MNT} 2>/dev/null
-  if [ -d ${DEVICE_MNT}/minimal/rootfs -a -d ${DEVICE_MNT}/minimal/work ] ; then
+  mount $DEVICE $DEVICE_MNT 2>/dev/null
+  if [ -d $DEVICE_MNT/minimal/rootfs -a -d $DEVICE_MNT/minimal/work ] ; then
     # folder
     echo -e "  Found \\e[94m/minimal\\e[0m folder on device \\e[31m$DEVICE\\e[0m."
-    touch ${DEVICE_MNT}/minimal/rootfs/minimal.pid 2>/dev/null
-    if [ -f ${DEVICE_MNT}/minimal/rootfs/minimal.pid ] ; then
+    touch $DEVICE_MNT/minimal/rootfs/minimal.pid 2>/dev/null
+    if [ -f $DEVICE_MNT/minimal/rootfs/minimal.pid ] ; then
       # read/write mode
       echo -e "  Device \\e[31m$DEVICE\\e[0m is mounted in read/write mode."
 
-      rm -f ${DEVICE_MNT}/minimal/rootfs/minimal.pid
+      rm -f $DEVICE_MNT/minimal/rootfs/minimal.pid
 
-      OVERLAY_DIR=${DEFAULT_OVERLAY_DIR}
-      OVERLAY_MNT=${DEVICE_MNT}
-      UPPER_DIR=${DEVICE_MNT}/minimal/rootfs
-      WORK_DIR=${DEVICE_MNT}/minimal/work
+      OVERLAY_DIR=$DEFAULT_OVERLAY_DIR
+      OVERLAY_MNT=$DEVICE_MNT
+      UPPER_DIR=$DEVICE_MNT/minimal/rootfs
+      WORK_DIR=$DEVICE_MNT/minimal/work
     else
       # read only mode
       echo -e "  Device \\e[31m$DEVICE\\e[0m is mounted in read only mode."
 
-      OVERLAY_DIR=${DEVICE_MNT}/minimal/rootfs
-      OVERLAY_MNT=${DEVICE_MNT}
-      UPPER_DIR=${DEFAULT_UPPER_DIR}
-      WORK_DIR=${DEFAULT_WORK_DIR}
+      OVERLAY_DIR=$DEVICE_MNT/minimal/rootfs
+      OVERLAY_MNT=$DEVICE_MNT
+      UPPER_DIR=$DEFAULT_UPPER_DIR
+      WORK_DIR=$DEFAULT_WORK_DIR
     fi
-  elif [ -f ${DEVICE_MNT}/minimal.img ] ; then
+  elif [ -f $DEVICE_MNT/minimal.img ] ; then
     #image
     echo -e "  Found \\e[94m/minimal.img\\e[0m image on device \\e[31m$DEVICE\\e[0m."
 
@@ -116,53 +116,53 @@ for DEVICE in /dev/* ; do
     IMAGE_MNT=/tmp/mnt/image
 
     LOOP_DEVICE=$(losetup -f)
-    losetup ${LOOP_DEVICE} ${DEVICE_MNT}/minimal.img
+    losetup $LOOP_DEVICE $DEVICE_MNT/minimal.img
 
-    mount ${LOOP_DEVICE} $IMAGE_MNT
-    if [ -d ${IMAGE_MNT}/rootfs -a -d ${IMAGE_MNT}/work ] ; then
-      touch ${IMAGE_MNT}/rootfs/minimal.pid 2>/dev/null
-      if [ -f ${IMAGE_MNT}/rootfs/minimal.pid ] ; then
+    mount $LOOP_DEVICE $IMAGE_MNT
+    if [ -d $IMAGE_MNT/rootfs -a -d $IMAGE_MNT/work ] ; then
+      touch $IMAGE_MNT/rootfs/minimal.pid 2>/dev/null
+      if [ -f $IMAGE_MNT/rootfs/minimal.pid ] ; then
         # read/write mode
         echo -e "  Image \\e[94m$DEVICE/minimal.img\\e[0m is mounted in read/write mode."
 
-        rm -f ${IMAGE_MNT}/rootfs/minimal.pid
+        rm -f $IMAGE_MNT/rootfs/minimal.pid
 
-        OVERLAY_DIR=${DEFAULT_OVERLAY_DIR}
-        OVERLAY_MNT=${IMAGE_MNT}
-        UPPER_DIR=${IMAGE_MNT}/rootfs
-        WORK_DIR=${IMAGE_MNT}/work
+        OVERLAY_DIR=$DEFAULT_OVERLAY_DIR
+        OVERLAY_MNT=$IMAGE_MNT
+        UPPER_DIR=$IMAGE_MNT/rootfs
+        WORK_DIR=$IMAGE_MNT/work
       else
         # read only mode
         echo -e "  Image \\e[94m$DEVICE/minimal.img\\e[0m is mounted in read only mode."
 
-        OVERLAY_DIR=${IMAGE_MNT}/rootfs
-        OVERLAY_MNT=${IMAGE_MNT}
-        UPPER_DIR=${DEFAULT_UPPER_DIR}
-        WORK_DIR=${DEFAULT_WORK_DIR}
+        OVERLAY_DIR=$IMAGE_MNT/rootfs
+        OVERLAY_MNT=$IMAGE_MNT
+        UPPER_DIR=$DEFAULT_UPPER_DIR
+        WORK_DIR=$DEFAULT_WORK_DIR
       fi
     else
-      umount ${IMAGE_MNT}
-      rm -rf ${IMAGE_MNT}
+      umount $IMAGE_MNT
+      rm -rf $IMAGE_MNT
     fi
   fi
 
   if [ "$OVERLAY_DIR" != "" -a "$UPPER_DIR" != "" -a "$WORK_DIR" != "" ] ; then
-    mkdir -p ${OVERLAY_DIR}
-    mkdir -p ${UPPER_DIR}
-    mkdir -p ${WORK_DIR}
+    mkdir -p $OVERLAY_DIR
+    mkdir -p $UPPER_DIR
+    mkdir -p $WORK_DIR
 
-    mount -t overlay -o lowerdir=${OVERLAY_DIR}:/mnt,upperdir=${UPPER_DIR},workdir=${WORK_DIR} none /mnt 2>/dev/null
+    mount -t overlay -o lowerdir=$OVERLAY_DIR:/mnt,upperdir=$UPPER_DIR,workdir=$WORK_DIR none /mnt 2>/dev/null
 
     OUT=$?
     if [ ! "$OUT" = "0" ] ; then
       echo -e "  \\e[31mMount failed (probably on vfat).\\e[0m"
 
-      umount ${OVERLAY_MNT} 2>/dev/null
-      rmdir ${OVERLAY_MNT} 2>/dev/null
+      umount $OVERLAY_MNT 2>/dev/null
+      rmdir $OVERLAY_MNT 2>/dev/null
 
-      rmdir ${DEFAULT_OVERLAY_DIR} 2>/dev/null
-      rmdir ${DEFAULT_UPPER_DIR} 2>/dev/null
-      rmdir ${DEFAULT_WORK_DIR} 2>/dev/null
+      rmdir $DEFAULT_OVERLAY_DIR 2>/dev/null
+      rmdir $DEFAULT_UPPER_DIR 2>/dev/null
+      rmdir $DEFAULT_WORK_DIR 2>/dev/null
     else
       # All done, time to go.
       echo -e "  Overlay data from device \\e[31m$DEVICE\\e[0m has been merged."
@@ -172,8 +172,8 @@ for DEVICE in /dev/* ; do
     echo -e "  Device \\e[31m$DEVICE\\e[0m has no proper overlay structure."
   fi
 
-  umount ${DEVICE_MNT} 2>/dev/null
-  rm -rf ${DEVICE_MNT} 2>/dev/null
+  umount $DEVICE_MNT 2>/dev/null
+  rm -rf $DEVICE_MNT 2>/dev/null
 done
 
 # Move critical file systems to the new mountpoint.

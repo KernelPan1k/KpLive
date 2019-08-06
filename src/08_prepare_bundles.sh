@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
@@ -8,16 +8,16 @@ set -e
 echo "*** PREPARE OVERLAY BEGIN ***"
 
 echo "Preparing overlay work area."
-rm -rf ${WORK_DIR}/overlay*
+rm -rf $WORK_DIR/overlay*
 
 # Read the 'OVERLAY_BUNDLES' property from '.config'
 OVERLAY_BUNDLES=`read_property OVERLAY_BUNDLES`
 
-if [[ ! "$OVERLAY_BUNDLES" = "" ]] ; then
+if [ ! "$OVERLAY_BUNDLES" = "" ] ; then
   echo "Generating additional overlay bundles. This may take a while."
-  cd ${SRC_DIR}/minimal_overlay
+  cd $SRC_DIR/minimal_overlay
   ./overlay_build.sh
-  cd ${SRC_DIR}
+  cd $SRC_DIR
 else
   echo "Generation of additional overlay bundles has been skipped."
 fi

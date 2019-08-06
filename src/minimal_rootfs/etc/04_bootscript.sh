@@ -24,15 +24,15 @@
 #                    |
 #                    +--(2) /bin/sh (Alt + F4)
 
-echo -e "Welcome to \\e[1mMinimal \\e[32mLinux \\e[31mLive\\e[0m (/sbin/init)"
+echo -e "Welcome to \\e[1mKPRescueLive\\e[0m (/sbin/init)"
 
 # Autorun functionality
-if [ -d /etc/autorun ]; then
+if [ -d /etc/autorun ] ; then
 for AUTOSCRIPT in /etc/autorun/*
   do
-    if [[ -f "$AUTOSCRIPT" ]] && [[ -x "$AUTOSCRIPT" ]]; then
+    if [ -f "$AUTOSCRIPT" ] && [ -x "$AUTOSCRIPT" ]; then
       echo -e "Executing \\e[32m$AUTOSCRIPT\\e[0m in subshell."
-      ${AUTOSCRIPT}
+      $AUTOSCRIPT
     fi
   done
 fi

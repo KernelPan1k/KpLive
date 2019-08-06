@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This script is useful if you have executed the MLL build process
 # with elevated rights. Ths script recursively reverts the ownership
@@ -8,7 +8,7 @@ set -e
 
 echo "*** CLEANUP BEGIN ***"
 
-if [[ "$(id -u)" = "0" ]] ; then
+if [ "$(id -u)" = "0" ] ; then
   echo "Applying original ownership to all affected files. This may take a while."
 
   # Find the original user. Note that this may not always be correct.
@@ -16,7 +16,7 @@ if [[ "$(id -u)" = "0" ]] ; then
   echo "Original user is '$ORIG_USER'."
 
   # Apply ownership back to original owner for all affected files.
-  chown -R ${ORIG_USER}:${ORIG_USER} *
+  chown -R $ORIG_USER:$ORIG_USER *
 else
   echo "No need to perform cleanup."
 fi

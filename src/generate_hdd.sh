@@ -1,16 +1,16 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
 # Create sparse file of 20MB which can be used by QEMU.
 
-if [[ "$1" = "-e" || "$1" = "--empty" ]] ; then
+if [ "$1" = "-e" -o "$1" = "--empty" ] ; then
   # Create new hard disk image file.
   rm -f hdd.img
   truncate -s 20M hdd.img
   echo "Created new hard disk image file 'hdd.img' with 20MB size."
-elif [[ "$1" = "-f" || "$1" = "--folder" ]] ; then
-  if [[ ! "$(id -u)" = "0" ]] ; then
+elif [ "$1" = "-f" -o "$1" = "--folder" ] ; then
+  if [ ! "$(id -u)" = "0" ] ; then
     echo "Using option '-f' (or '--folder') requires root permissions."
     exit 1
   fi
@@ -20,10 +20,10 @@ elif [[ "$1" = "-f" || "$1" = "--folder" ]] ; then
   echo "Created new hard disk image file 'hdd.img' with 20MB size."
 
   LOOP_DEVICE=$(losetup -f)
-  losetup ${LOOP_DEVICE} hdd.img
+  losetup $LOOP_DEVICE hdd.img
   echo "Attached hard disk image file to loop device."
 
-  mkfs.ext2 ${LOOP_DEVICE}
+  mkfs.ext2 $LOOP_DEVICE
   echo "Hard disk image file has been formatted with Ext2 filesystem."
 
   mkdir folder
@@ -43,15 +43,15 @@ elif [[ "$1" = "-f" || "$1" = "--folder" ]] ; then
   rm -rf folder
   echo "Unmounted hard disk image file."
 
-  losetup -d ${LOOP_DEVICE}
+  losetup -d $LOOP_DEVICE
   echo "Detached hard disk image file from loop device."
 
   # Find the original user. Note that this may not always be correct.
   ORIG_USER=`who | awk '{print \$1}'`
-  chown ${ORIG_USER} hdd.img
+  chown $ORIG_USER hdd.img
   echo "Applied original ownership to hard disk image file."
-elif [[ "$1" = "-s" || "$1" = "--sparse" ]] ; then
-  if [[ ! "$(id -u)" = "0" ]] ; then
+elif [ "$1" = "-s" -o "$1" = "--sparse" ] ; then
+  if [ ! "$(id -u)" = "0" ] ; then
     echo "Using option '-s' (or '--sparse') requires root permissions."
     exit 1
   fi
@@ -61,10 +61,10 @@ elif [[ "$1" = "-s" || "$1" = "--sparse" ]] ; then
   echo "Created new hard disk image file 'hdd.img' with 20MB size."
 
   LOOP_DEVICE_HDD=$(losetup -f)
-  losetup ${LOOP_DEVICE_HDD} hdd.img
+  losetup $LOOP_DEVICE_HDD hdd.img
   echo "Attached hard disk image file to loop device."
 
-  mkfs.vfat ${LOOP_DEVICE_HDD}
+  mkfs.vfat $LOOP_DEVICE_HDD
   echo "Hard disk image file has been formatted with FAT filesystem."
 
   rm -rf sparse
@@ -77,10 +77,10 @@ elif [[ "$1" = "-s" || "$1" = "--sparse" ]] ; then
   echo "Created new overlay image file with 3MB size."
 
   LOOP_DEVICE_OVL=$(losetup -f)
-  losetup ${LOOP_DEVICE_OVL} sparse/minimal.img
+  losetup $LOOP_DEVICE_OVL sparse/minimal.img
   echo "Attached overlay image file to loop device."
 
-  mkfs.ext2 ${LOOP_DEVICE_OVL}
+  mkfs.ext2 $LOOP_DEVICE_OVL
   echo "Overlay image file has been formatted with Ext2 filesystem."
 
   mkdir ovl
@@ -104,7 +104,7 @@ elif [[ "$1" = "-s" || "$1" = "--sparse" ]] ; then
   rm -rf ovl
   echo "Unmounted overlay image file."
 
-  losetup -d ${LOOP_DEVICE_OVL}
+  losetup -d $LOOP_DEVICE_OVL
   sleep 1
   echo "Overlay image file has been detached from loop device."
 
@@ -115,16 +115,16 @@ elif [[ "$1" = "-s" || "$1" = "--sparse" ]] ; then
   rm -rf sparse
   echo "Unmounted hard disk image file."
 
-  losetup -d ${LOOP_DEVICE_HDD}
+  losetup -d $LOOP_DEVICE_HDD
   sleep 1
   echo "Hard disk image file has been detached from loop device."
   # Find the original user. Note that this may not always be correct.
   ORIG_USER=`who | awk '{print \$1}'`
 
-  chown ${ORIG_USER} hdd.img
+  chown $ORIG_USER hdd.img
 
   echo "Applied original ownership to hard disk image file."
-elif [[ "$1" = "-h" || "$1" = "--help" ]] ; then
+elif [ "$1" = "-h" -o "$1" = "--help" ] ; then
   cat << CEOF
   Usage: $0 [OPTION]
   This utility generates 20MB sparse file 'hdd.img' which can be used as QEMU
@@ -139,7 +139,7 @@ elif [[ "$1" = "-h" || "$1" = "--help" ]] ; then
                   Ext2 filesystem which contains the actual overlay structure.
 CEOF
 
-elif [[ "$1" = "" ]] ; then
+elif [ "$1" = "" ] ; then
   echo "No option specified. Use '-h' or '--help' for more info."
 else
   echo "Option '$1' is not recognized. Use '-h' or '--help' for more info."

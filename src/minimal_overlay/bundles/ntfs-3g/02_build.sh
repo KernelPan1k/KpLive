@@ -6,8 +6,8 @@ set -e
 
 cd $WORK_DIR/overlay/$BUNDLE_NAME
 
-# Change to the kbd source directory which ls finds, e.g. 'kbd-2.04'.
-cd $(ls -d kbd-*)
+# Change to the ntfs-3g source directory which ls finds
+cd $(ls -d ntfs-3g_*)
 
 if [ -f Makefile ] ; then
   echo "Preparing '$BUNDLE_NAME' work area. This may take a while."
@@ -19,34 +19,30 @@ fi
 rm -rf $DEST_DIR
 
 echo "Configuring '$BUNDLE_NAME'."
+
 CFLAGS="$CFLAGS" ./configure \
-  --prefix=/usr \
-  --disable-vlock
-# vlock requires PAM
+    --prefix=/usr \
+    --disable-static \
+    --with-fuse=internal
 
 echo "Building '$BUNDLE_NAME'."
 make -j $NUM_JOBS
 
 echo "Installing '$BUNDLE_NAME'."
-make -j $NUM_JOBS install DESTDIR="$DEST_DIR"
+make -j $NUM_JOBS install DESTDIR=$DEST_DIR
+
+mkdir $DEST_DIR/lib
+cp $DEST_DIR/usr/lib/libntfs-3g* $DEST_DIR/lib
 
 echo "Reducing '$BUNDLE_NAME' size."
 set +e
-strip -g \
-  $DEST_DIR/usr/bin/* \
-  $DEST_DIR/usr/sbin/* \
-  $DEST_DIR/lib/*
+strip -g $DEST_DIR/usr/bin/*
 set -e
-
-mkdir -p $OVERLAY_ROOTFS/usr
-mkdir -p $OVERLAY_ROOTFS/etc/autorun
 
 # With '--remove-destination' all possibly existing soft links in
 # '$OVERLAY_ROOTFS' will be overwritten correctly.
-cp -r --remove-destination "$DEST_DIR/usr/bin" "$DEST_DIR/usr/share" \
-  "$OVERLAY_ROOTFS/usr/"
-cp -r --remove-destination "$SRC_DIR/90_kbd.sh" \
-  "$OVERLAY_ROOTFS/etc/autorun"
+cp -r --remove-destination $DEST_DIR/* \
+  $OVERLAY_ROOTFS
 
 echo "Bundle '$BUNDLE_NAME' has been installed."
 
