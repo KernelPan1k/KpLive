@@ -24,7 +24,7 @@
 #                    |
 #                    +--(2) /bin/sh (Alt + F4)
 
-echo -e "Welcome to \\e[1mKPRescueLive\\e[0m (/sbin/init)"
+echo -e "Welcome to \\e[31mKPLive\\e[0m (/sbin/init)"
 
 # Autorun functionality
 if [ -d /etc/autorun ] ; then

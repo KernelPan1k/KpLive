@@ -303,7 +303,7 @@
       echo >> welcome.txt
       echo '  #####################################' >> welcome.txt
       echo '  #                                   #' >> welcome.txt
-      echo '  #  Welcome to "Minimal Linux Live"  #' >> welcome.txt
+      echo '  #  Welcome to "KPLive"  #' >> welcome.txt
       echo '  #                                   #' >> welcome.txt
       echo '  #####################################' >> welcome.txt
       echo >> welcome.txt
@@ -363,7 +363,7 @@
       echo >> welcome.txt
       echo '  #####################################' >> welcome.txt
       echo '  #                                   #' >> welcome.txt
-      echo '  #  Welcome to "Minimal Linux Live"  #' >> welcome.txt
+      echo '  #  Welcome to "KPLive"  #' >> welcome.txt
       echo '  #                                   #' >> welcome.txt
       echo '  #####################################' >> welcome.txt
       echo >> welcome.txt
@@ -622,7 +622,7 @@
       echo >> welcome.txt
       echo '  #####################################' >> welcome.txt
       echo '  #                                   #' >> welcome.txt
-      echo '  #  Welcome to "Minimal Linux Live"  #' >> welcome.txt
+      echo '  #  Welcome to "KPLive"  #' >> welcome.txt
       echo '  #                                   #' >> welcome.txt
       echo '  #####################################' >> welcome.txt
       echo >> welcome.txt

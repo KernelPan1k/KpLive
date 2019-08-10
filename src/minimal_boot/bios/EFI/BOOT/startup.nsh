@@ -1,3 +1,3 @@
 echo -off
-echo Minimal Linux Live is starting.
+echo KPLive is starting.
 \boot\kernel.xz initrd=\boot\rootfs.xz
