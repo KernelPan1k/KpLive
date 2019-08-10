@@ -6,9 +6,9 @@
 
 I added ntfs-3g, fuse and attr to manipulate Windows partitions, files and file attributes. The initial purpose of this Live is to restore the backups of the Windows registry created by KpRM.
 
-To change the keyboard configuration (default en), you can do (for example):
+To change the keyboard configuration (default us), you can do (for example):
 
-- loadkeys en (default)
+- loadkeys us (default)
 - loadkeys fr
 - loadkeys fr_CH
 

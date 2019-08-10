@@ -2,6 +2,7 @@ KPLive is based on Minimal Linux Live (thanks)
 
 To change the keyboard configuration, you can do (for example):
 
+- loadkeys us (default)
 - loadkeys fr
 - loadkeys fr_CH
 
