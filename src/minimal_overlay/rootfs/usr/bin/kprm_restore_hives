@@ -31,9 +31,9 @@ restore_the_backup() {
 
   cd "$backup_path" || exit
 
-  log "Restore hives in backup $1 at $BACKUP_DATE"
+  log "-- kprm_restore_hives --"
   log " "
-  cp -Rfv . $MOUNT_POINT | tee -a "$LOG_FILE"
+  log "Restore hives in backup $1 at $BACKUP_DATE"
   log " "
 
   hives_list=$(find . -type f -print)
@@ -41,9 +41,12 @@ restore_the_backup() {
   cd $MOUNT_POINT || exit
 
   for hive in $hives_list; do
-    if [ -f "$hive" ]; then
+    if [ -f "$hive" ] && [ -f "$backup_path"/"$hive" ]; then
       hive_path=$(dirname "$hive")
       hive_name=$(basename "$hive" | tr '[:lower:]' '[:upper:]')
+
+      cp -Rvf "$backup_path"/"$hive" "$hive" | tee -a "$LOG_FILE"
+      log " "
 
       if [ "$hive_name" = "NTUSER.DAT" ]; then
         log "Restore Attributes +h +s +a for $hive_name located in $hive_path"
@@ -58,6 +61,7 @@ restore_the_backup() {
     else
       log "Hive $hive not found"
     fi
+    log " "
   done
 
   log " "
