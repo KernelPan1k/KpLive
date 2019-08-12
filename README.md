@@ -4,7 +4,7 @@
 
 - The original source code is located here: https://github.com/ivandavidov/minimal
 
-I added ntfs-3g, fuse and attr to manipulate Windows partitions, files and file attributes. The initial purpose of this Live is to restore the backups of the Windows registry created by KpRM.
+I added ntfs-3g, fuse and attr to manipulate Windows partitions, files and file attributes. The initial purpose of this Live is to restore the backups of the Windows registry created by KpRm.
 
 To change the keyboard configuration (default us), you can do (for example):
 
