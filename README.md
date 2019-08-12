@@ -3,6 +3,7 @@
 **KpLive** is based on **Mininal Linux Live** (thanks)
 
 - The original source code is located here: https://github.com/ivandavidov/minimal
+- Download KPLive: https://toolslib.net/downloads/viewdownload/1004-kplive/
 
 I added ntfs-3g, fuse and attr to manipulate Windows partitions, files and file attributes. The initial purpose of this Live is to restore the backups of the Windows registry created by KpRm.
 
